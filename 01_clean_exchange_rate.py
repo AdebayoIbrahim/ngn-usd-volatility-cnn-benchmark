@@ -21,6 +21,7 @@ BASE_DIR = Path(".")  # current folder
 monthly_file = BASE_DIR / "datasets/Monthly_Average_Exchange_Rates_Data_in_Excel.xlsx"
 daily_2022_2023_file = BASE_DIR / "datasets/ranges.xlsx"
 daily_2024_file = BASE_DIR / "datasets/2024.xlsx"
+daily_2021_file = BASE_DIR / "datasets/2021.xlsx"
 
 output_dir = BASE_DIR / "data_cleaned"
 figures_dir = BASE_DIR / "figures"
@@ -87,6 +88,54 @@ monthly_clean = monthly_clean.sort_values("Date").reset_index(drop=True)
 print("\nMonthly cleaned preview:")
 print(monthly_clean.head())
 print(monthly_clean.tail())
+
+
+# ============================================================
+# 4.2. Clean daily CBN exchange-rate data: 2021
+# ============================================================
+
+daily_2021 = pd.read_excel(daily_2021_file)
+
+print("\n2021 daily file columns:")
+print(daily_2021.columns.tolist())
+
+daily_2021_clean = daily_2021.copy()
+
+# Convert date
+daily_2021_clean["Date"] = pd.to_datetime(
+    daily_2021_clean["Date"],
+    errors="coerce"
+)
+
+# Use Central Rate as ₦/USD rate
+daily_2021_clean["usd_ngn_rate"] = clean_numeric(
+    daily_2021_clean["Central Rate"]
+)
+
+# Drop rows with missing date or rate
+daily_2021_clean = daily_2021_clean.dropna(
+    subset=["Date", "usd_ngn_rate"]
+)
+
+# Convert daily data to monthly average
+daily_2021_monthly = (
+    daily_2021_clean
+    .set_index("Date")
+    .resample("MS")["usd_ngn_rate"]
+    .mean()
+    .reset_index()
+)
+
+# We only need May 2021 to December 2021
+# because Jan-Apr 2021 already exists in the monthly file
+daily_2021_monthly = daily_2021_monthly[
+    (daily_2021_monthly["Date"] >= "2021-05-01") &
+    (daily_2021_monthly["Date"] <= "2021-12-01")
+].copy()
+
+print("\n2021 monthly converted preview:")
+print(daily_2021_monthly.head())
+print(daily_2021_monthly.tail())
 
 
 # ============================================================
@@ -180,6 +229,7 @@ print(daily_2024_monthly.tail())
 exchange_rate = pd.concat(
     [
         monthly_clean,
+        daily_2021_monthly,
         daily_2022_2023_monthly,
         daily_2024_monthly
     ],
@@ -252,7 +302,12 @@ print(exchange_rate.isna().sum())
 # But we will only do this if there are missing values inside existing rows.
 exchange_rate["usd_ngn_rate"] = exchange_rate["usd_ngn_rate"].ffill()
 
+# Check missing values AFTER filling
+print("\nMissing values count after filling:")
+print(exchange_rate.isna().sum())
 
+print("\nRows still missing exchange rate:")
+print(exchange_rate[exchange_rate["usd_ngn_rate"].isna()])
 # ============================================================
 # 10. Create basic exchange-rate plot
 # ============================================================
@@ -288,3 +343,7 @@ print("\nSaved plot:")
 print(plot_path)
 
 print("\nExchange-rate cleaning completed successfully.")
+
+
+
+
