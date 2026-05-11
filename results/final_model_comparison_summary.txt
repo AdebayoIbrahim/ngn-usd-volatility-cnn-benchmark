@@ -1,0 +1,21 @@
+
+Final Model Comparison Summary
+
+The three models evaluated in this study are:
+1. ARIMA-GARCH
+2. Bayesian VAR
+3. Multivariate 2D-CNN V3 Volatility Regression
+
+The model with the best F1-score is: ARIMA-GARCH
+
+Model performance table:
+
+                                       model  accuracy  precision  recall  f1_score    auc  rank_by_accuracy  rank_by_f1  rank_by_auc
+                                 ARIMA-GARCH    0.8667     0.8947  0.8095    0.8500 0.8968                 1           1            1
+                                Bayesian VAR    0.8444     0.8889  0.7619    0.8205 0.8929                 2           2            2
+Multivariate 2D-CNN V3 Volatility Regression    0.7111     0.7000  0.6667    0.6829 0.6548                 3           3            3
+
+Interpretation:
+ARIMA-GARCH and Bayesian VAR achieved stronger performance than the Multivariate 2D-CNN.
+The ARIMA-GARCH model recorded the highest F1-score, making it the most effective model for detecting ₦/USD volatility spikes in this experiment.
+The CNN model improved when reformulated as a volatility regression model, but it still underperformed the classical models, likely due to the small monthly dataset size.

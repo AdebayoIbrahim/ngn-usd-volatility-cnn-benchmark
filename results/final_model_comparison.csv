@@ -1,0 +1,4 @@
+model,accuracy,precision,recall,f1_score,auc,rank_by_accuracy,rank_by_f1,rank_by_auc
+ARIMA-GARCH,0.8667,0.8947,0.8095,0.85,0.8968,1,1,1
+Bayesian VAR,0.8444,0.8889,0.7619,0.8205,0.8929,2,2,2
+Multivariate 2D-CNN V3 Volatility Regression,0.7111,0.7,0.6667,0.6829,0.6548,3,3,3
