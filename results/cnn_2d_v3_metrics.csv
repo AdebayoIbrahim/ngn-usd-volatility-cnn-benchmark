@@ -1,0 +1,2 @@
+model,accuracy,precision,recall,f1_score,auc,mae,mse,rmse,volatility_threshold,window_size,epochs_trained,num_features
+Multivariate 2D-CNN V3 Volatility Regression,0.7111111111111111,0.7,0.6666666666666666,0.6829268292682927,0.6547619047619048,4.211111504499351,69.5684472213322,8.34077018154392,1.4256577491760254,12,89,8

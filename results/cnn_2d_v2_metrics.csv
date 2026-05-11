@@ -1,0 +1,2 @@
+model,accuracy,precision,recall,f1_score,auc,classification_threshold,window_size,epochs_trained,num_features
+Multivariate 2D-CNN V2,0.5777777777777777,0.5833333333333334,0.3333333333333333,0.42424242424242425,0.46825396825396826,0.4099999999999998,12,45,8
